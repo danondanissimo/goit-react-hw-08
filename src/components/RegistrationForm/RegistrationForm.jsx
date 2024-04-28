@@ -30,7 +30,7 @@ const RegistrationForm = () => {
   const dispatch = useDispatch();
   const onRegisterAccount = (values, actions) => {
     actions.resetForm();
-    console.log(values);
+
     dispatch(apiRegister(values));
   };
 
@@ -41,7 +41,6 @@ const RegistrationForm = () => {
   };
   return (
     <div>
-      {" "}
       <Formik
         initialValues={FORM_INITIAL_VALUES}
         validationSchema={registrationSchema}

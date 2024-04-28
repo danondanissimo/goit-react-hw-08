@@ -11,15 +11,20 @@ import ContactForm from "../../components/ContactForm/ContactForm";
 import ContactModal from "../../components/ContactModal/ContactModal";
 import ContactPopUp from "../../components/ContactPopUp/ContactPopUp.jsx";
 import css from "./ContactsPage.module.css";
+import { selectIsSignedIn } from "../../redux/auth/selectors.js";
 
 const ContactsPage = () => {
   const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(apiFetchContacts());
-  }, [dispatch]);
 
   const isLoading = useSelector(selectLoading);
   const isError = useSelector(selectError);
+  const isSignedIn = useSelector(selectIsSignedIn);
+
+  useEffect(() => {
+    if (isSignedIn) {
+      dispatch(apiFetchContacts());
+    }
+  }, [dispatch, isSignedIn]);
 
   return (
     <>

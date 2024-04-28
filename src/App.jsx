@@ -21,6 +21,10 @@ import RestrictedRoute from "./components/RestrictedRoute/RestrictedRoute.jsx";
 import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
 import { apiRefreshUser } from "./redux/auth/operations.js";
 import { Toaster } from "react-hot-toast";
+import {
+  selectAccountError,
+  selectIsSignedIn,
+} from "./redux/auth/selectors.js";
 
 function App() {
   const dispatch = useDispatch();
@@ -28,10 +32,15 @@ function App() {
   const isLoading = useSelector(selectLoading);
 
   const isError = useSelector(selectError);
+  const isAccountError = useSelector(selectAccountError);
+  const isSignedIn = useSelector(selectIsSignedIn);
 
   useEffect(() => {
-    dispatch(apiRefreshUser());
-  }, [dispatch]);
+    if (isSignedIn) {
+      dispatch(apiRefreshUser());
+    }
+  }, [dispatch, isSignedIn]);
+
   return (
     <>
       <header></header>
@@ -66,7 +75,7 @@ function App() {
         </Routes>
       </Layout>
       <Toaster />
-      {isError && <ErrorMessage />}
+      {isError || (isAccountError && <ErrorMessage />)}
       {isLoading && <Loader />}
     </>
   );

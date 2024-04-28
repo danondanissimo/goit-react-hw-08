@@ -6,7 +6,7 @@ export const apiRegister = createAsyncThunk(
   async (formData, thunkApi) => {
     try {
       const { data } = await instance.post("/users/signup", formData);
-      console.log("data: ", data);
+
       setToken(data.token);
       return data;
     } catch (error) {
@@ -20,7 +20,7 @@ export const apiLogin = createAsyncThunk(
   async (formData, thunkApi) => {
     try {
       const { data } = await instance.post("/users/login", formData);
-      console.log("data: ", data);
+
       setToken(data.token);
       return data;
     } catch (error) {
