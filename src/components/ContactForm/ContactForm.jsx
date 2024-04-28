@@ -2,7 +2,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import * as Yup from "yup";
 import css from "./ContactForm.module.css";
 import { useDispatch } from "react-redux";
-import { apiAddContact } from "../../redux/contactsOps";
+import { apiAddContact } from "../../redux/contacts/operations";
 
 const phoneRegExp = /^\d{3}-\d{3}-\d{4}$/;
 const minNameLength = 3;
@@ -23,7 +23,6 @@ const ContactForm = () => {
   const onAddContact = (values, actions) => {
     const finalContact = {
       ...values,
-      createdAt: new Date().toISOString(),
     };
     actions.resetForm();
     const action = apiAddContact(finalContact);

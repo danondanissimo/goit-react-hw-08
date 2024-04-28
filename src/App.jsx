@@ -4,17 +4,23 @@ import { useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
 
-import ContactList from "./components/ContactList/ContactList.jsx";
-
-import ContactForm from "./components/ContactForm/ContactForm";
-import SearchBox from "./components/SearchBox/SearchBox.jsx";
-
-import { apiFetchContacts } from "./redux/contactsOps.js";
 import ErrorMessage from "./components/ErrorMessage/ErrorMessage.jsx";
 
 import Loader from "./components/Loader/Loader.jsx";
 
-import { selectError, selectLoading } from "./redux/contactsSlice.js";
+import { selectError, selectLoading } from "./redux/contacts/selectors.js";
+import { Route, Routes } from "react-router-dom";
+import HomePage from "./pages/HomePage/HomePage.jsx";
+import RegistrationPage from "./pages/RegistrationPage/RegistrationPage.jsx";
+import LoginPage from "./pages/LoginPage/LoginPage.jsx";
+import ContactsPage from "./pages/ContactsPage/ContactsPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage/NotFoundPage.jsx";
+import Layout from "./components/Layout/Layout.jsx";
+
+import RestrictedRoute from "./components/RestrictedRoute/RestrictedRoute.jsx";
+import PrivateRoute from "./components/PrivateRoute/PrivateRoute.jsx";
+import { apiRefreshUser } from "./redux/auth/operations.js";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const dispatch = useDispatch();
@@ -24,18 +30,44 @@ function App() {
   const isError = useSelector(selectError);
 
   useEffect(() => {
-    dispatch(apiFetchContacts());
+    dispatch(apiRefreshUser());
   }, [dispatch]);
-
   return (
     <>
-      <h1>Phonebook</h1>
-      <ContactForm />
+      <header></header>
+      <Layout>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/register"
+            element={
+              <RestrictedRoute>
+                <RegistrationPage />
+              </RestrictedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoute>
+                <LoginPage />
+              </RestrictedRoute>
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute>
+                <ContactsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Layout>
+      <Toaster />
       {isError && <ErrorMessage />}
       {isLoading && <Loader />}
-
-      <SearchBox />
-      <ContactList />
     </>
   );
 }

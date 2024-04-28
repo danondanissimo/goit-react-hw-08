@@ -1,8 +1,21 @@
+import { useDispatch } from "react-redux";
 import css from "./Contact.module.css";
+import { openModal, openPopUp } from "../../redux/contacts/slice";
 
-const Contact = ({ name, number, id, deleteContact, createdAt }) => {
-  const date = createdAt.slice(0, 10);
-  const time = createdAt.slice(11, 16);
+const Contact = ({ name, number, id }) => {
+  const dispatch = useDispatch();
+  const popUpOpen = ({ id, name }) => {
+    const userData = { id, name };
+    const action = openPopUp(userData);
+    dispatch(action);
+  };
+
+  const modalOpen = ({ id, name, number }) => {
+    const contactData = { id, name, number };
+    const action = openModal(contactData);
+    dispatch(action);
+  };
+
   return (
     <div className={css.contactContainer}>
       <h1 className={css.name}>{name}</h1>
@@ -11,18 +24,23 @@ const Contact = ({ name, number, id, deleteContact, createdAt }) => {
         📞{number}
       </a>
 
-      <p className={css.date}>
-        Added: 📆{date} 🕒{time}
-      </p>
-
       <button
         type="button"
         onClick={() => {
-          deleteContact(id);
+          popUpOpen({ id, name });
         }}
-        className={css.button}
+        className={css.deleteButton}
       >
         Delete
+      </button>
+      <button
+        type="button"
+        onClick={() => {
+          modalOpen({ id, name, number });
+        }}
+        className={css.editButton}
+      >
+        Edit
       </button>
     </div>
   );

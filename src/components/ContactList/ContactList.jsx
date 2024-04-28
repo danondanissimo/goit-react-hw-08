@@ -1,31 +1,28 @@
-import { useDispatch, useSelector } from "react-redux";
+import { useSelector } from "react-redux";
 import Contact from "../Contact/Contact.jsx";
 import css from "./ContactList.module.css";
-import { selectFilteredContacts } from "../../redux/contactsSlice.js";
-import { apiDeleteContact } from "../../redux/contactsOps.js";
+import { selectFilteredContacts } from "../../redux/contacts/selectors.js";
 
 const ContactList = () => {
-  const dispatch = useDispatch();
   const filteredContacts = useSelector(selectFilteredContacts);
 
-  const onDeleteContact = (contactId) => {
-    dispatch(apiDeleteContact(contactId));
-  };
+  // const filteredContacts = useSelector(selectContacts);
+
   return (
     <ul className={css.list}>
-      {filteredContacts.map((contact) => {
-        return (
-          <li key={contact.id}>
-            <Contact
-              name={contact.name}
-              number={contact.number}
-              id={contact.id}
-              createdAt={contact.createdAt}
-              deleteContact={onDeleteContact}
-            />
-          </li>
-        );
-      })}
+      {Array.isArray(filteredContacts) &&
+        filteredContacts.length > 0 &&
+        filteredContacts.map((contact) => {
+          return (
+            <li key={contact.id}>
+              <Contact
+                name={contact.name}
+                number={contact.number}
+                id={contact.id}
+              />
+            </li>
+          );
+        })}
     </ul>
   );
 };
