@@ -7,7 +7,7 @@ const HomePage = () => {
       </p>
       <div>
         <img
-          src={`./src/images/raccoon-ayasan.gif`}
+          src={`https://media1.tenor.com/m/90HLWDj3dQkAAAAd/raccoon-ayasan.gif`}
           alt="racoon riding a scooter"
         />
       </div>
